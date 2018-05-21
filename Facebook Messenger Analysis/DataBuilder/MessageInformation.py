@@ -98,33 +98,6 @@ class Participant(object):
         return len(self.Messages)
 
 
-class Nickname(object):
-
-    def __init__(self, participant_name: str, setter_name: str, timestamp: datetime.datetime, nickname: str) -> None:
-        """
-        Initiates a Nickname Object which contains the data for a nickname created in the chat
-        :param participant_name: The User who has this nickname
-        :param setter_name: The Person who set this nickname
-        :param timestamp: The Timestamp of when the nickname was set
-        :param nickname: The String representation of the nickname
-        """
-        self.ParticipantName = participant_name
-        self.SetterName = setter_name
-        self.timestamp = timestamp
-        self.Nickname = nickname
-
-    def __str__(self) -> str:
-        """
-        Creates a string representation of a nickname object
-        :return: The string representation
-        """
-        return_str = self.SetterName + " set " + \
-                     self.ParticipantName + "'s nickname to " + \
-                     self.Nickname + " on " + \
-                     self.timestamp.__str__()
-        return return_str
-
-
 class Message(object):
     def __init__(self, message_data: dict) -> None:
         """
