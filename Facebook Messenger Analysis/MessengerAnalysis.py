@@ -1,5 +1,4 @@
 import json
-import time
 
 from DataBuilder.MessageInformation import ChatHistory
 

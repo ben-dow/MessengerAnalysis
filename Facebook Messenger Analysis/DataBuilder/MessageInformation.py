@@ -1,42 +1,74 @@
 import datetime
 
 
-
 class ChatHistory(object):
+    """
 
-    def __init__(self, JsonData, DataOwner):
+    Describes and holds all of the data for a Chat History parsed from a Facebook Messenger JSON
+    Currently Processes:
+        Chat Participants
+        Chat Messages
+        Nicknames
 
-        self.DataOwner = DataOwner
-        self.ChatParticipants = self.process_participant_list(JsonData["participants"])
-        self.ChatMessages = self.process_messages(JsonData["messages"])
+    It requires the manual input of the Full Facebook Name of the User who Downloaded the JSON from FB
+
+
+    """
+
+    def __init__(self, json_data: dict, data_owner: str) -> None:
+        """
+        Initiates the Chat History Object
+
+        :param json_data: The dictionary containing all of the JSON data for the messenger
+        :param data_owner: The string for the name of the data owner
+        """
+        self.DataOwner = data_owner
+        self.ChatParticipants = self._process_participant_list(json_data["participants"])
+        self.ChatMessages = self._process_messages(json_data["messages"])
 
         from DataBuilder.NicknameParsing import reconstruct_nicknames
         reconstruct_nicknames(self)
 
-
     @staticmethod
-    def process_participant_list(participant_json):
-        participant_list = {}
-        for p in participant_json:
+    def _process_participant_list(participants_list: list) -> dict:
+        """
+        Processes the JSON Data of Participants into a list of Participant Objects that can be manipulated
+
+        :param participants_list: The list of participants from the JSON Data
+        :return: A list of Participant Objects
+        """
+        participant_list = {}  # Initiate Dictionary to Store Participants
+
+        for p in participants_list:
             participant_list[p] = Participant(p)
+
         return participant_list
 
-    def process_messages(self, message_json):
+    def _process_messages(self, message_list: list) -> list:
+        """
+        Processes the Messages form the JSON Data into a list of Message Objects that can be manipulated
 
+        :param message_list: A list of Messages from the JSON Data
+        :return: A list of Message Objects
+        """
         msgs = []
-        for m in message_json:
+        for m in message_list:
 
             msg = Message(m)
             msgs.append(msg)
 
-            if msg.Sender not in self.ChatParticipants:
-                self.ChatParticipants[msg.Sender] = Participant(msg.Sender)
+            if msg.Sender not in self.ChatParticipants:  # Check if the Sender is a Participant
+                self.ChatParticipants[msg.Sender] = Participant(msg.Sender)  # Add the Sender to the Participant List
 
             self.ChatParticipants[msg.Sender].Messages.append(msg)
 
         return msgs
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """
+        Creates a String representation of the Chat History
+        :return: A String of the Chat History
+        """
         participant_num = self.ChatParticipants.__len__()
         message_num = self.ChatMessages.__len__()
 
@@ -46,55 +78,93 @@ class ChatHistory(object):
 
 class Participant(object):
 
-    def __init__(self, name):
+    def __init__(self, name: str) -> None:
+        """
+        Initiates a Participant Object which contains the data for a participant in the messenger chat
+
+        :param name: The String Name of the Participant
+        """
         self.Name = name
         self.Messages = []
         self.Nicknames = []
         self.Reactions = []
 
-    def number_of_messages(self):
+    def number_of_messages(self) -> int:
+        """
+        Calculates the number of messages that the participant has sent
+
+        :return: The Integer of the number of messages sent by the participant
+        """
         return len(self.Messages)
 
 
 class Nickname(object):
 
-    def __init__(self, participant_name, setter_name, timestamp, nickname):
+    def __init__(self, participant_name: str, setter_name: str, timestamp: datetime.datetime, nickname: str) -> None:
+        """
+        Initiates a Nickname Object which contains the data for a nickname created in the chat
+        :param participant_name: The User who has this nickname
+        :param setter_name: The Person who set this nickname
+        :param timestamp: The Timestamp of when the nickname was set
+        :param nickname: The String representation of the nickname
+        """
         self.ParticipantName = participant_name
         self.SetterName = setter_name
         self.timestamp = timestamp
         self.Nickname = nickname
 
-    def __str__(self):
-        return_str = self.SetterName + " set " +\
-                     self.ParticipantName + "'s nickname to " +\
-                     self.Nickname + " on " +\
+    def __str__(self) -> str:
+        """
+        Creates a string representation of a nickname object
+        :return: The string representation
+        """
+        return_str = self.SetterName + " set " + \
+                     self.ParticipantName + "'s nickname to " + \
+                     self.Nickname + " on " + \
                      self.timestamp.__str__()
         return return_str
 
 
 class Message(object):
-    def __init__(self, message_data):
+    def __init__(self, message_data: dict) -> None:
+        """
+        Initiates a Message Object which contains the data for a Message that was sent in a Messenger Chat
+        from the raw JSON Data
 
+        :param message_data: The JSON Data for a Message from Facebook
+        """
         self.Sender = message_data["sender_name"]
 
-        self.timestamp = datetime.datetime.\
+        self.timestamp = datetime.datetime. \
             fromtimestamp(int(message_data["timestamp"]))
 
         self.Type = message_data["type"]
 
         self.Content, self.ContentType = self.process_message_content(message_data)
 
-        self.ReactData = self.process_message_reactions(message_data)
+    def __str__(self) -> str:
+        """
+        Creates a string representation of a Message object
 
-    def __str__(self):
+        :return: The string representation
+        """
         str = "Sender: " + self.Sender + '\n' + \
               "Timestamp: " + self.timestamp.__str__() + '\n' + \
               "Message: " + self.Content.__str__() + '\n'
         return str
 
     @staticmethod
-    def process_message_content(message_data):
-
+    def process_message_content(message_data: dict) -> (str or list, str):
+        """
+        Function to process the message content from the JSON (dict) Data
+        :param message_data: The JSON Data
+        :return: A tuple containing a string of Content or the list of content sent and a str describing what kind of message it is
+                The message could be one of the following:
+                PHOTOS
+                GIFS
+                MESSAGE
+                FILE
+        """
         # Process Message that contained Photos
         if "photos" in message_data:
             content_type = "PHOTOS"
@@ -110,8 +180,6 @@ class Message(object):
                 content.append(g["uri"])
 
         # Process Message that contained text content
-        # TODO Process messages that actually are a function within the chat
-        # TODO Such as Polls, Nicknames, or Adding Someone to the Chat
         elif "content" in message_data:
             content_type = "MESSAGE"
             content = message_data["content"]
@@ -133,28 +201,3 @@ class Message(object):
             content = None
 
         return content, content_type
-
-    @staticmethod
-    def process_message_reactions(message_data):
-
-        if "reactions" in message_data:
-            react_data = []
-            for r in message_data["reactions"]:
-                reaction =  r["reaction"]
-                actor = r["actor"]
-                react_data.append((reaction,actor))
-
-        else:
-            react_data = None
-
-        return react_data
-
-
-
-
-
-
-
-
-
-
