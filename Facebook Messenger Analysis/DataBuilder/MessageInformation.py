@@ -29,6 +29,9 @@ class ChatHistory(object):
         from DataBuilder.NicknameParsing import reconstruct_nicknames
         reconstruct_nicknames(self)
 
+        from DataBuilder.MemberShipParsing import person__added_or_removed__reconstruction
+        person__added_or_removed__reconstruction(self)
+
     @staticmethod
     def _process_participant_list(participants_list: list) -> dict:
         """
@@ -86,8 +89,9 @@ class Participant(object):
         """
         self.Name = name
         self.Messages = []
-        self.Nicknames = []
+        self.Nicknames = {}
         self.Reactions = []
+        self.MemberShipRecords = []
 
     def number_of_messages(self) -> int:
         """

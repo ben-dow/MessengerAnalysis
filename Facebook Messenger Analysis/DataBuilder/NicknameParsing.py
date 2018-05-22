@@ -88,7 +88,7 @@ def nickname_message_parse(message: Message) -> Nickname:
 
     '''Regex for Finding the Nickname'''
     target_nick_regex =\
-        re.compile('((?<= to )(.*)(?=.*)(?=.))')  # Regex for the Nickname
+        re.compile('((?<= to )(.*)(?=.*)(?:!|\?|(?=.)))')  # Regex for the Nickname
 
     own_nick_regex = re.compile('((?<= own nickname to )(.*)(?=.*)(?=.))') # Regex for the Nickname from a Third Party to Same Third Party
 
@@ -118,7 +118,7 @@ def nickname_message_parse(message: Message) -> Nickname:
     return Nickname(target, setter, message.timestamp, nickname)
 
 
-def reconstruct_nicknames(chat_history: ChatHistory) -> None:
+def reconstruct_nicknames(chat_history: ChatHistory) -> dict:
     """
     Function to initiate the reconstruction of Nickname History from a chat history
     :param chat_history: The Chat History
@@ -129,6 +129,8 @@ def reconstruct_nicknames(chat_history: ChatHistory) -> None:
 
     participants = chat_history.ChatParticipants  # Get the Participant List for the Chat history
 
+    nickname_dict = {}
+
     for m in nick_msgs:  # Handle each Message individually
 
         nick = nickname_message_parse(m)  # Get the Nickname Object for Manipulation
@@ -137,5 +139,9 @@ def reconstruct_nicknames(chat_history: ChatHistory) -> None:
         if target == "DataOwner":  # Check to see if DataOwner was the target.
             nick.ParticipantName = chat_history.DataOwner  # If so, update that with the actual name of the data owner
 
-        participants[nick.ParticipantName].Nicknames.\
-            append(nick)  # Place the nickname data directly into the object representing the Participant
+        participants[nick.ParticipantName].Nicknames[nick.Nickname] = \
+            nick  # Place the nickname data directly into the object representing the Participant
+
+        nickname_dict[nick.Nickname] = nick
+
+    return nickname_dict
