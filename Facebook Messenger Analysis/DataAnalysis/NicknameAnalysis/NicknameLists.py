@@ -13,6 +13,7 @@ def nicknames_for_person(chat_history: ChatHistory, participant: str) -> list:
         return chat_history.ChatParticipants[participant].Nicknames
 
 
+
 def nicknames_by_participant(chat_history: ChatHistory) -> dict:
     """
     Fetches all of the nicknames for all of the participants in the chat and returns it as a dict
@@ -23,6 +24,7 @@ def nicknames_by_participant(chat_history: ChatHistory) -> dict:
     for p in chat_history.ChatParticipants:
         nicks = chat_history.ChatParticipants[p].Nicknames
         for n in nicks:
-            res[p] = nicks[n].Nickname
-
+            if p not in res:
+                res[p] = []
+            res[p].append(nicks[n].Nickname)
     return res
