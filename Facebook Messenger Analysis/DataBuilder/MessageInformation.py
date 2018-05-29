@@ -25,6 +25,7 @@ class ChatHistory(object):
         self.DataOwner = data_owner
         self.ChatParticipants = self._process_participant_list(json_data["participants"])
         self.ChatMessages = self._process_messages(json_data["messages"])
+        self.ChatName = json_data["title"]
 
         from DataBuilder.NicknameParsing import reconstruct_nicknames
         reconstruct_nicknames(self)
