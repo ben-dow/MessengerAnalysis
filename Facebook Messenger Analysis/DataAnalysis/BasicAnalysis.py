@@ -11,3 +11,4 @@ def basic_analysis_package(chat: ChatHistory) -> dict:
         "Message Counts By Participants": messages_count_per_participant(chat),
         "Nicknames for Each Participant": nicknames_by_participant(chat)
     }
+    return res

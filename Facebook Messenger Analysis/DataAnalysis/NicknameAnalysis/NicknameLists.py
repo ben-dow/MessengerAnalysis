@@ -21,6 +21,8 @@ def nicknames_by_participant(chat_history: ChatHistory) -> dict:
     res = {}
 
     for p in chat_history.ChatParticipants:
-        res[p] = chat_history.ChatParticipants[p].Nicknames
+        nicks = chat_history.ChatParticipants[p].Nicknames
+        for n in nicks:
+            res[p] = nicks[n].Nickname
 
     return res
