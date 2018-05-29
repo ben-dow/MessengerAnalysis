@@ -11,3 +11,16 @@ def nicknames_for_person(chat_history: ChatHistory, participant: str) -> list:
     """
     if participant in chat_history.ChatParticipants:  # Makes sure the participant exists
         return chat_history.ChatParticipants[participant].Nicknames
+
+
+def nicknames_by_participant(chat_history: ChatHistory) -> dict:
+    """
+    Fetches all of the nicknames for all of the participants in the chat and returns it as a dict
+    :param chat_history: the chat history
+    """
+    res = {}
+
+    for p in chat_history.ChatParticipants:
+        res[p] = chat_history.ChatParticipants[p].Nicknames
+
+    return res

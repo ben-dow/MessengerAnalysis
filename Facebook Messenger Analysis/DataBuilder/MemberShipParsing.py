@@ -67,19 +67,17 @@ def _construct_original_membership(chat_history: ChatHistory):
         people[p].MemberShipRecords.sort(key=lambda x: x.timestamp, reverse=False)
         persons_records = people[p].MemberShipRecords
 
-        if (len(persons_records) == 0 and len(people[p].Messages) > 0) or\
+        if (len(persons_records) == 0 and len(people[p].Messages) > 0) or \
                 persons_records[0].RecordType == ("REMOVED" or "LEFT"):
             people[p].Messages.sort(key=lambda x: x.timestamp)
             first_message = people[p].Messages[0]
             record = MembershipRecord(first_message, first_message.timestamp, "ADDED", None, people[p], True)
             people[p].MemberShipRecords.append(record)
             people[p].Messages.sort(key=lambda x: x.timestamp)
-        elif (len(persons_records) == 0 and len(people[p].Messages) == 0):
+        elif len(persons_records) == 0 and len(people[p].Messages) == 0:
             first_message = messages[0]
-            record = MembershipRecord(first_message, first_message.timestamp,"ADDED", None, people[p], True)
+            record = MembershipRecord(first_message, first_message.timestamp, "ADDED", None, people[p], True)
             people[p].MemberShipRecords.append(record)
-
-
 
 
 def _check_if_member_message(message: Message, chat_history: ChatHistory) -> bool:
@@ -147,29 +145,29 @@ def _process_added_message(message: Message, chat_history):
     names = names_added_regex.search(message.Content.__str__()).group()
 
     if " and " in names:
-        seperate_names_regex = re.compile('(.*)(?= and )|(?<= and )(.*)')
-        seperate_names = seperate_names_regex.findall(names)
+        separate_names_regex = re.compile('(.*)(?= and )|(?<= and )(.*)')
+        separate_names = separate_names_regex.findall(names)
 
-        FirstPerson = seperate_names[0][0]
-        SecondPerson = seperate_names[2][1]
+        first_person = separate_names[0][0]
+        second_person = separate_names[2][1]
 
-        chat_history.ChatParticipants[FirstPerson].MemberShipRecords.append(
+        chat_history.ChatParticipants[first_person].MemberShipRecords.append(
             MembershipRecord(message,
                              message.timestamp,
                              "ADDED",
                              chat_history.ChatParticipants[message.Sender],
-                             chat_history.ChatParticipants[FirstPerson]))
+                             chat_history.ChatParticipants[first_person]))
 
         check_actual_person_regex = re.compile('[0-9]* others')
-        match = check_actual_person_regex.search(SecondPerson)
+        match = check_actual_person_regex.search(second_person)
 
         if not match:
-            chat_history.ChatParticipants[SecondPerson].MemberShipRecords.append(
+            chat_history.ChatParticipants[second_person].MemberShipRecords.append(
                 MembershipRecord(message,
                                  message.timestamp,
                                  "ADDED",
                                  chat_history.ChatParticipants[message.Sender],
-                                 chat_history.ChatParticipants[SecondPerson]))
+                                 chat_history.ChatParticipants[second_person]))
 
     else:
         chat_history.ChatParticipants[names].MemberShipRecords.append(

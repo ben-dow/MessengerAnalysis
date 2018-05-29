@@ -125,10 +125,10 @@ class Message(object):
 
         :return: The string representation
         """
-        str = "Sender: " + self.Sender + '\n' + \
+        return_str = "Sender: " + self.Sender + '\n' + \
               "Timestamp: " + self.timestamp.__str__() + '\n' + \
               "Message: " + self.Content.__str__() + '\n'
-        return str
+        return return_str
 
     @staticmethod
     def process_message_content(message_data: dict) -> (str or list, str):
