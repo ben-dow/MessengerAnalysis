@@ -19,6 +19,10 @@ with open(file_location) as file:
 start = time.time()
 chat = ChatHistory(data, data_owner)
 print(time.time() - start)
+
+for n in chat.ChatNameHistory:
+    print(n)
+
 '''
 Do Analysis on it Down Here:
 '''

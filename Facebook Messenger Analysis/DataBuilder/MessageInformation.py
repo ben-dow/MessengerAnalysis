@@ -26,12 +26,16 @@ class ChatHistory(object):
         self.ChatParticipants = self._process_participant_list(json_data["participants"])
         self.ChatMessages = self._process_messages(json_data["messages"])
         self.ChatName = json_data["title"]
+        self.ChatNameHistory = []
 
         from DataBuilder.NicknameParsing import reconstruct_nicknames
         reconstruct_nicknames(self)
 
         from DataBuilder.MemberShipParsing import person__added_or_removed__reconstruction
         person__added_or_removed__reconstruction(self)
+
+        from DataBuilder.ChatNameParsing import chat_renamed_reconstruction
+        chat_renamed_reconstruction(self)
 
     @staticmethod
     def _process_participant_list(participants_list: list) -> dict:
