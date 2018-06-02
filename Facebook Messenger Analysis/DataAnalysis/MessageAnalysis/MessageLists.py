@@ -1,5 +1,5 @@
 import datetime
-from DataBuilder.MessageInformation import ChatHistory
+from DataBuilder.ChatParsing import ChatHistory
 
 """
 Functions to return lists of Messages based on criteria

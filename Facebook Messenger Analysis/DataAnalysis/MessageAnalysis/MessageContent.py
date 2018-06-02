@@ -1,4 +1,4 @@
-from DataBuilder.MessageInformation import ChatHistory
+from DataBuilder.ChatParsing import ChatHistory
 
 
 def word_count(word: str, chat_history: ChatHistory = None, message_list: list = []) -> int:

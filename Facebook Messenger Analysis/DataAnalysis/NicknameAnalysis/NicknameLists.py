@@ -1,4 +1,4 @@
-from DataBuilder.MessageInformation import ChatHistory
+from DataBuilder.ChatParsing import ChatHistory
 
 
 def nicknames_for_person(chat_history: ChatHistory, participant: str) -> list:

@@ -1,6 +1,7 @@
 import datetime
 import re
-from DataBuilder.MessageInformation import Message, ChatHistory
+from DataBuilder.ChatParsing import ChatHistory
+from DataBuilder.MessageParsing import Message
 
 
 def nickname_messages(message_list: list) -> list:

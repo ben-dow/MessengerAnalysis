@@ -1,7 +1,9 @@
 import datetime
 import re
 
-from DataBuilder.MessageInformation import ChatHistory, Message, Participant
+from DataBuilder.ChatParsing import ChatHistory
+from DataBuilder.MessageParsing import Message
+from DataBuilder.ParticipantParsing import Participant
 
 
 class MembershipRecord(object):

@@ -1,4 +1,4 @@
-from DataBuilder.MessageInformation import ChatHistory
+from DataBuilder.ChatParsing import ChatHistory
 
 
 def most_removed(chat_history:ChatHistory):

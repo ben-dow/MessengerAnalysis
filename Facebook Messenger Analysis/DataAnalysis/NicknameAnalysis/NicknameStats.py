@@ -1,5 +1,5 @@
 import matplotlib.pyplot as pl
-from DataBuilder.MessageInformation import ChatHistory
+from DataBuilder.ChatParsing import ChatHistory
 
 
 def most_nicknames(chat_history: ChatHistory) -> None:

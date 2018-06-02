@@ -1,7 +1,7 @@
 from DataAnalysis.MessageAnalysis.MessageCounts import total_messages, total_participants, \
     messages_count_per_participant
 from DataAnalysis.NicknameAnalysis.NicknameLists import nicknames_by_participant
-from DataBuilder.MessageInformation import ChatHistory
+from DataBuilder.ChatParsing import ChatHistory
 
 
 def basic_analysis_package(chat: ChatHistory) -> dict:

@@ -1,5 +1,5 @@
 from DataAnalysis.MessageAnalysis.MessageLists import *
-from DataBuilder.MessageInformation import ChatHistory
+from DataBuilder.ChatParsing import ChatHistory
 
 """
 Methods to return counts of messages based on criteria
