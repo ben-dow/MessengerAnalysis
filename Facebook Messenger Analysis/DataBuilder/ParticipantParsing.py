@@ -31,6 +31,6 @@ def _process_participant_list(participants_list: list) -> dict:
         participant_list = {}  # Initiate Dictionary to Store Participants
 
         for p in participants_list:
-            participant_list[p] = Participant(p)
+            participant_list[p["name"]] = Participant(p["name"])
 
         return participant_list

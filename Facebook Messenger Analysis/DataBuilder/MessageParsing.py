@@ -14,7 +14,7 @@ class Message(object):
         self.Sender = message_data["sender_name"]
 
         self.timestamp = datetime.datetime. \
-            fromtimestamp(int(message_data["timestamp"]))
+            fromtimestamp(int(message_data["timestamp_ms"])/1000)
 
         self.Type = message_data["type"]
 
