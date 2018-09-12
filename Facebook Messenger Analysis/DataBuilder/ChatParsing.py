@@ -36,8 +36,8 @@ class ChatHistory(object):
             from DataBuilder.NicknameParsing import reconstruct_nicknames
             reconstruct_nicknames(self)
         if membership_history:
-            from DataBuilder.MemberShipParsing import person__added_or_removed__reconstruction
-            person__added_or_removed__reconstruction(self)
+            from DataBuilder.MemberShipParsing import membership_history_reconstruction
+            membership_history_reconstruction(self)
         if chat_names_history:
             from DataBuilder.ChatNameParsing import chat_renamed_reconstruction
             chat_renamed_reconstruction(self)
