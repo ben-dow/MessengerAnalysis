@@ -39,3 +39,7 @@ Thumbs.db
 */idea
 /.idea
 */.idea
+
+testData/*
+/venv
+Stats.txt
